@@ -93,45 +93,10 @@ export function Workspace() {
   if (loading) return <LoadingState label="Loading mission…" />;
   if (error || !mission) return <ErrorState message={error ?? 'Mission not found'} onRetry={reload} />;
 
-  // One consistent overlay set for every mode's Grounding tab: every piece of
-  // spatial evidence, colored by its own validation status (conflict=red,
-  // insufficient=amber, otherwise supported=green).
-  const groundingOverlays: Overlay[] = evidenceGeoms.map((e) => ({
-    geometry: e.geometry!,
-    color: e.validation_status === 'conflict' ? 'bad' : e.validation_status === 'insufficient' ? 'warn' : 'ok',
-    label: e.title,
-    onClick: () => setExplain(e),
-  }));
-
-  let primary1: Observation | undefined;
-  let primary2: Observation | undefined;
-  let primary1Key = 'primary1';
-  let primary2Key = 'primary2';
-  let groundingObs: Observation | undefined;
-  let swipeBeforeLabel = 'Before';
-  let swipeAfterLabel = 'After';
-  let swipeAfterOverlays: Overlay[] = [];
-
-  if (mission.mode === 'bi_temporal') {
-    primary1 = obsByRole.before; primary2 = obsByRole.after;
-    primary1Key = 'before'; primary2Key = 'after';
-    groundingObs = obsByRole.after;
-    swipeBeforeLabel = 'Before'; swipeAfterLabel = 'After';
-  } else if (mission.mode === 'optical_sar' || mission.mode === 'region_centric') {
-    primary1 = obsByRole.optical; primary2 = obsByRole.sar;
-    primary1Key = 'optical'; primary2Key = 'sar';
-    groundingObs = obsByRole.optical;
-    swipeBeforeLabel = 'Optical'; swipeAfterLabel = 'SAR';
-  } else {
-    primary1 = obsByRole.single;
-    primary1Key = 'scene';
-    groundingObs = obsByRole.single;
-    swipeBeforeLabel = 'Raw'; swipeAfterLabel = 'Grounded';
-    swipeAfterOverlays = groundingOverlays; // single image has only one frame -- swipe/blink reveal the grounding overlay
-  }
-
-  const swipeBeforeObs = primary1;
-  const swipeAfterObs = mission.mode === 'single_image' ? primary1 : primary2;
+  const overlaysFor = (color: Overlay['color']): Overlay[] =>
+    evidenceGeoms
+      .filter((e) => (color === 'bad' ? e.validation_status === 'conflict' : e.validation_status !== 'conflict'))
+      .map((e) => ({ geometry: e.geometry!, color, label: e.title, onClick: () => setExplain(e) }));
 
   return (
     <div className="flex flex-1 flex-col overflow-hidden">
@@ -171,56 +136,38 @@ export function Workspace() {
           </div>
 
           <div className="flex-1">
-            {primary1 && tab === primary1Key && (
-              <RasterFrame imageUrl={assetUrl(primary1.image_path)} regionBbox={mission.region.bbox} label={primary1.name} />
-            )}
-            {primary2 && tab === primary2Key && (
-              <RasterFrame imageUrl={assetUrl(primary2.image_path)} regionBbox={mission.region.bbox} label={primary2.name} />
-            )}
-
-            {groundingObs && tab === 'grounding' && (
-              <RasterFrame
-                imageUrl={assetUrl(groundingObs.image_path)}
-                regionBbox={mission.region.bbox}
-                label={groundingObs.name}
-                overlays={groundingOverlays}
-              />
-            )}
-            {groundingObs && tab === 'grounding' && groundingOverlays.length === 0 && (
-              <p className="mt-2 text-xs text-ink-muted">No spatially-located evidence was produced for this mission to ground.</p>
+            {mission.mode === 'bi_temporal' && obsByRole.before && obsByRole.after && (
+              <>
+                {tab === 'before' && <RasterFrame imageUrl={assetUrl(obsByRole.before.image_path)} regionBbox={mission.region.bbox} label={obsByRole.before.name} />}
+                {tab === 'after' && (
+                  <RasterFrame
+                    imageUrl={assetUrl(obsByRole.after.image_path)}
+                    regionBbox={mission.region.bbox}
+                    label={obsByRole.after.name}
+                    overlays={overlaysFor('warn')}
+                  />
+                )}
+                {tab === 'swipe' && <SwipeCompare beforeUrl={assetUrl(obsByRole.before.image_path)} afterUrl={assetUrl(obsByRole.after.image_path)} />}
+                {tab === 'blink' && <BlinkCompare beforeUrl={assetUrl(obsByRole.before.image_path)} afterUrl={assetUrl(obsByRole.after.image_path)} />}
+                {tab === 'map' && <div className="aspect-square w-full"><SpatialMap regionBbox={mission.region.bbox} features={mapFeatures} onFeatureClick={(id) => setExplain(evidenceGeoms.find((e) => e.id === id) ?? null)} /></div>}
+              </>
             )}
 
-            {swipeBeforeObs && swipeAfterObs && tab === 'swipe' && (
-              <SwipeCompare
-                beforeUrl={assetUrl(swipeBeforeObs.image_path)}
-                afterUrl={assetUrl(swipeAfterObs.image_path)}
-                beforeLabel={swipeBeforeLabel}
-                afterLabel={swipeAfterLabel}
-                afterOverlays={swipeAfterOverlays}
-                regionBbox={mission.region.bbox}
-              />
-            )}
-            {swipeBeforeObs && swipeAfterObs && tab === 'blink' && (
-              <BlinkCompare
-                beforeUrl={assetUrl(swipeBeforeObs.image_path)}
-                afterUrl={assetUrl(swipeAfterObs.image_path)}
-                beforeLabel={swipeBeforeLabel}
-                afterLabel={swipeAfterLabel}
-                afterOverlays={swipeAfterOverlays}
-                regionBbox={mission.region.bbox}
-              />
+            {(mission.mode === 'optical_sar' || mission.mode === 'region_centric') && obsByRole.optical && obsByRole.sar && (
+              <>
+                {tab === 'optical' && <RasterFrame imageUrl={assetUrl(obsByRole.optical.image_path)} regionBbox={mission.region.bbox} label={obsByRole.optical.name} overlays={overlaysFor('bad')} />}
+                {tab === 'sar' && <RasterFrame imageUrl={assetUrl(obsByRole.sar.image_path)} regionBbox={mission.region.bbox} label={obsByRole.sar.name} />}
+                {tab === 'map' && <div className="aspect-square w-full"><SpatialMap regionBbox={mission.region.bbox} features={mapFeatures} onFeatureClick={(id) => setExplain(evidenceGeoms.find((e) => e.id === id) ?? null)} /></div>}
+              </>
             )}
 
-            {/* Always mounted (visibility toggled) -- WebGL maps don't tolerate being
-                repeatedly created/destroyed on every tab switch. */}
-            <div className={`aspect-square w-full ${tab === 'map' ? '' : 'hidden'}`}>
-              <SpatialMap
-                regionBbox={mission.region.bbox}
-                features={mapFeatures}
-                onFeatureClick={(id) => setExplain(evidenceGeoms.find((e) => e.id === id) ?? null)}
-                active={tab === 'map'}
-              />
-            </div>
+            {mission.mode === 'single_image' && obsByRole.single && (
+              <>
+                {tab === 'scene' && <RasterFrame imageUrl={assetUrl(obsByRole.single.image_path)} regionBbox={mission.region.bbox} label={obsByRole.single.name} />}
+                {tab === 'grounding' && <RasterFrame imageUrl={assetUrl(obsByRole.single.image_path)} regionBbox={mission.region.bbox} label={obsByRole.single.name} overlays={overlaysFor('accent')} />}
+                {tab === 'map' && <div className="aspect-square w-full"><SpatialMap regionBbox={mission.region.bbox} features={mapFeatures} onFeatureClick={(id) => setExplain(evidenceGeoms.find((e) => e.id === id) ?? null)} /></div>}
+              </>
+            )}
           </div>
 
           {explain && (
@@ -252,7 +199,7 @@ export function Workspace() {
                 <Panel eyebrow="Innovation: Cross-Sensor Validation" title="Sensor Consistency Status">
                   <StatusBadge status={mission.result.sensor_consistency.level} />
                   {mission.result.sensor_consistency.level !== 'HIGH_AGREEMENT' && (
-                    <Button variant="secondary" className="ml-2" onClick={() => setTab('grounding')}>
+                    <Button variant="secondary" className="ml-2" onClick={() => setTab(mission.mode === 'bi_temporal' ? 'after' : 'optical')}>
                       Investigate Conflict
                     </Button>
                   )}
@@ -357,18 +304,12 @@ export function Workspace() {
 }
 
 function tabsFor(mode: string) {
-  const primary =
-    mode === 'bi_temporal'
-      ? [{ key: 'before', label: 'Before' }, { key: 'after', label: 'After' }]
-      : mode === 'optical_sar' || mode === 'region_centric'
-        ? [{ key: 'optical', label: 'Optical' }, { key: 'sar', label: 'SAR' }]
-        : [{ key: 'scene', label: 'Scene' }];
-
-  return [
-    ...primary,
-    { key: 'grounding', label: 'Grounding' },
-    { key: 'swipe', label: 'Swipe Compare' },
-    { key: 'blink', label: 'Blink Compare' },
-    { key: 'map', label: 'Spatial Map' },
+  if (mode === 'bi_temporal') return [
+    { key: 'before', label: 'Before' }, { key: 'after', label: 'After' },
+    { key: 'swipe', label: 'Swipe Compare' }, { key: 'blink', label: 'Blink Compare' }, { key: 'map', label: 'Spatial Map' },
   ];
+  if (mode === 'optical_sar' || mode === 'region_centric') return [
+    { key: 'optical', label: 'Optical' }, { key: 'sar', label: 'SAR' }, { key: 'map', label: 'Spatial Map' },
+  ];
+  return [{ key: 'scene', label: 'Scene' }, { key: 'grounding', label: 'Grounding' }, { key: 'map', label: 'Spatial Map' }];
 }

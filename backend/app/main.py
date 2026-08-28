@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
-from app.api.routes import missions, model_registry, regions, uploads
+from app.api.routes import missions, model_registry, regions
 from app.db.base import Base
 from app.db.session import engine
 
@@ -24,7 +24,6 @@ app.mount("/static", StaticFiles(directory="app/static"), name="static")
 app.include_router(missions.router)
 app.include_router(regions.router)
 app.include_router(model_registry.router)
-app.include_router(uploads.router)
 
 
 @app.get("/api/health")

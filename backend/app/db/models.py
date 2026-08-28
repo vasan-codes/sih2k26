@@ -16,24 +16,6 @@ def _now() -> datetime:
 
 
 # ---------------------------------------------------------------------------
-# Region Store -- the 3 built-in demo AOIs live in demo_data.scenarios.REGIONS;
-# regions created from a user's uploaded imagery are persisted here instead, so
-# uploads behave exactly like any other region (Region Intelligence, Mission
-# History, etc. all keep working unchanged).
-# ---------------------------------------------------------------------------
-class RegionRecord(Base):
-    __tablename__ = "regions"
-
-    key: Mapped[str] = mapped_column(String, primary_key=True)
-    label: Mapped[str] = mapped_column(String)
-    description: Mapped[str] = mapped_column(Text)
-    bbox: Mapped[list] = mapped_column(JSON)
-    modes: Mapped[list] = mapped_column(JSON)
-    is_custom: Mapped[bool] = mapped_column(default=True)
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_now)
-
-
-# ---------------------------------------------------------------------------
 # A. Mission & Query Store
 # ---------------------------------------------------------------------------
 class Mission(Base):

@@ -5,10 +5,9 @@ from sqlalchemy.orm import Session
 
 from app.db.models import ExternalObservation, Observation
 from app.db.session import get_db
-from app.demo_data.scenarios import OPTICAL_SAR
+from app.demo_data.scenarios import OPTICAL_SAR, REGIONS
 from app.schemas.schemas import CorrelationOut, ExternalObservationOut, RegionOut
 from app.services.correlation import correlate_external_signal
-from app.services.region_store import list_all_regions, region_exists, resolve_region
 
 router = APIRouter(prefix="/api/regions", tags=["regions"])
 
@@ -16,8 +15,7 @@ router = APIRouter(prefix="/api/regions", tags=["regions"])
 @router.get("", response_model=list[RegionOut])
 def api_list_regions(db: Session = Depends(get_db)):
     out = []
-    for region in list_all_regions(db):
-        key = region.pop("key")
+    for key, region in REGIONS.items():
         obs = db.query(Observation).filter(Observation.region_key == key).all()
         out.append(RegionOut(key=key, observations=obs, **region))
     return out
@@ -25,10 +23,10 @@ def api_list_regions(db: Session = Depends(get_db)):
 
 @router.get("/{region_key}", response_model=RegionOut)
 def api_get_region(region_key: str, db: Session = Depends(get_db)):
-    if not region_exists(db, region_key):
+    if region_key not in REGIONS:
         raise HTTPException(404, "Unknown region")
     obs = db.query(Observation).filter(Observation.region_key == region_key).all()
-    return RegionOut(key=region_key, observations=obs, **resolve_region(db, region_key))
+    return RegionOut(key=region_key, observations=obs, **REGIONS[region_key])
 
 
 @router.get("/{region_key}/external-observations", response_model=list[ExternalObservationOut])

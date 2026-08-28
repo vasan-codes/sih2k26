@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 
 from app.db.models import Evidence, ExecutionStep, Mission, Observation
 from app.db.session import get_db
+from app.demo_data.scenarios import REGIONS
 from app.orchestration.orchestrator import PipelineError, run_mission_pipeline
 from app.schemas.schemas import (
     AnalyzeRequest,
@@ -20,13 +21,12 @@ from app.schemas.schemas import (
 from app.services.input_validation import validate_geospatial, validate_inputs
 from app.services.knowledge_graph import build_knowledge_graph
 from app.services.query_understanding import understand_query
-from app.services.region_store import region_exists, resolve_region
 
 router = APIRouter(prefix="/api", tags=["missions"])
 
 
 def _mission_detail(db: Session, mission: Mission) -> MissionDetailOut:
-    region = resolve_region(db, mission.region_key)
+    region = REGIONS[mission.region_key]
     observations = db.query(Observation).filter(Observation.region_key == mission.region_key).all()
     evidence_items = db.query(Evidence).filter(Evidence.mission_id == mission.id).all()
     steps = (
@@ -82,14 +82,12 @@ def api_validate_inputs(req: ValidateInputsRequest, db: Session = Depends(get_db
 
 @router.post("/analyze", response_model=MissionDetailOut)
 def api_analyze(req: AnalyzeRequest, db: Session = Depends(get_db)):
-    if not region_exists(db, req.region_key):
+    if req.region_key not in REGIONS:
         raise HTTPException(404, f"Unknown region '{req.region_key}'")
 
-    region = resolve_region(db, req.region_key)
     mission = Mission(
-        title=req.title or f"{region['label']} — {req.mode.replace('_', ' ').title()}",
+        title=req.title or f"{REGIONS[req.region_key]['label']} — {req.mode.replace('_', ' ').title()}",
         query_text=req.query_text, mode=req.mode, region_key=req.region_key, status="running",
-        is_demo=False,
     )
     db.add(mission)
     db.commit()
@@ -142,7 +140,7 @@ def api_knowledge_graph(mission_id: str, db: Session = Depends(get_db)):
         raise HTTPException(404, "Mission not found")
     observations = db.query(Observation).filter(Observation.region_key == mission.region_key).all()
     evidence_items = db.query(Evidence).filter(Evidence.mission_id == mission_id).all()
-    return build_knowledge_graph(db, mission, observations, evidence_items)
+    return build_knowledge_graph(mission, observations, evidence_items)
 
 
 @router.post("/report/{mission_id}")
