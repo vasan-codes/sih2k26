@@ -19,7 +19,13 @@ export function Panel({
   noPadding?: boolean;
 }) {
   return (
-    <section className={clsx('rounded-lg border border-border-subtle bg-surface shadow-panel', className)}>
+    <section
+      className={clsx(
+        'hairline-top group animate-fade-up overflow-hidden rounded-lg border border-border-subtle bg-surface/80 shadow-panel backdrop-blur-sm',
+        'transition-all duration-300 ease-out hover:-translate-y-0.5 hover:border-accent/25 hover:shadow-panel-hover',
+        className,
+      )}
+    >
       {(title || actions || eyebrow) && (
         <header className="flex items-center justify-between gap-3 border-b border-border-subtle px-4 py-3">
           <div>

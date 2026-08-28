@@ -45,6 +45,71 @@
       linear-gradient(to bottom, rgba(255,255,255,0.028) 1px, transparent 1px);
     background-size: 28px 28px;
   }
+
+  /* Deep-space animated backdrop: parallax star layers + drifting nebula */
+  .bg-space {
+    background-color: #05070a;
+    background-image:
+      radial-gradient(1px 1px at 20% 30%, rgba(231,237,245,0.9), transparent),
+      radial-gradient(1px 1px at 75% 15%, rgba(231,237,245,0.7), transparent),
+      radial-gradient(1.5px 1.5px at 40% 70%, rgba(99,199,240,0.8), transparent),
+      radial-gradient(1px 1px at 88% 55%, rgba(231,237,245,0.6), transparent),
+      radial-gradient(1px 1px at 12% 85%, rgba(231,237,245,0.7), transparent),
+      radial-gradient(1.5px 1.5px at 62% 42%, rgba(79,143,232,0.7), transparent),
+      radial-gradient(1px 1px at 30% 55%, rgba(231,237,245,0.5), transparent),
+      radial-gradient(2px 2px at 55% 88%, rgba(231,237,245,0.5), transparent);
+    background-repeat: repeat;
+    background-size: 340px 340px, 420px 420px, 520px 520px, 300px 300px, 480px 480px, 600px 600px, 260px 260px, 700px 700px;
+    animation: star-drift 140s linear infinite;
+  }
+
+  .glass {
+    background: linear-gradient(180deg, rgba(17,25,39,0.72), rgba(11,16,23,0.72));
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .text-gradient {
+    background: linear-gradient(135deg, #e7edf5 0%, #63c7f0 55%, #4f8fe8 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+
+  .hairline-top {
+    position: relative;
+  }
+  .hairline-top::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(99,199,240,0.5), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .hairline-top:hover::before {
+    opacity: 1;
+  }
+}
+
+@keyframes star-drift {
+  from { background-position: 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0; }
+  to {
+    background-position:
+      340px 680px, -420px 840px, 520px -520px, 300px 600px,
+      -480px 480px, 600px 900px, 260px -520px, -700px 700px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bg-space { animation: none; }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
 }
 
 .maplibregl-ctrl-attrib { display: none !important; }
