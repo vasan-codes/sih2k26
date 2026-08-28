@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  html, body, #root {
+    height: 100%;
+  }
+
+  body {
+    margin: 0;
+    background-color: #05070a;
+    color: #e7edf5;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background-color: rgba(63, 182, 232, 0.35);
+  }
+
+  * {
+    scrollbar-color: #263344 #0b1017;
+    scrollbar-width: thin;
+  }
+
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: #0b1017; }
+  ::-webkit-scrollbar-thumb { background: #263344; border-radius: 8px; }
+  ::-webkit-scrollbar-thumb:hover { background: #334255; }
+}
+
+@layer utilities {
+  .font-tabular {
+    font-variant-numeric: tabular-nums;
+  }
+  .bg-grid {
+    background-image:
+      linear-gradient(to right, rgba(255,255,255,0.028) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,0.028) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+}
+
+.maplibregl-ctrl-attrib { display: none !important; }
