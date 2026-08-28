@@ -69,6 +69,62 @@
     -webkit-backdrop-filter: blur(12px);
   }
 
+  /* Horizon glow — a planetary limb light at the bottom of the viewport */
+  .bg-horizon {
+    background:
+      radial-gradient(120% 80% at 50% 118%, rgba(63,182,232,0.18) 0%, rgba(79,143,232,0.08) 34%, transparent 60%);
+  }
+
+  /* Fine scanline overlay for a mission-control CRT feel */
+  .scanlines {
+    background-image: repeating-linear-gradient(
+      0deg,
+      rgba(255,255,255,0.015) 0px,
+      rgba(255,255,255,0.015) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+  }
+
+  /* Shooting star streak */
+  .shooting-star {
+    position: absolute;
+    height: 1px;
+    width: 130px;
+    background: linear-gradient(90deg, rgba(231,237,245,0.9), rgba(99,199,240,0.35), transparent);
+    border-radius: 9999px;
+    filter: drop-shadow(0 0 6px rgba(99,199,240,0.7));
+  }
+
+  /* Route transition wrapper */
+  .route-shell {
+    animation: route-in 0.55s cubic-bezier(0.22,1,0.36,1) both;
+  }
+
+  /* HUD corner brackets */
+  .hud-frame {
+    position: relative;
+  }
+  .hud-frame::before,
+  .hud-frame::after {
+    content: '';
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    border-color: rgba(63,182,232,0.5);
+    pointer-events: none;
+  }
+  .hud-frame::before {
+    top: -1px; left: -1px;
+    border-top: 1.5px solid; border-left: 1.5px solid;
+    border-top-left-radius: 6px;
+  }
+  .hud-frame::after {
+    bottom: -1px; right: -1px;
+    border-bottom: 1.5px solid; border-right: 1.5px solid;
+    border-bottom-right-radius: 6px;
+  }
+
   .text-gradient {
     background: linear-gradient(135deg, #e7edf5 0%, #63c7f0 55%, #4f8fe8 100%);
     -webkit-background-clip: text;

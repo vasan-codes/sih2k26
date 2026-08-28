@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import clsx from 'clsx';
 
 const NAV_SECTIONS: { label: string; items: { to: string; label: string; icon: string }[] }[] = [
@@ -30,10 +30,21 @@ const NAV_SECTIONS: { label: string; items: { to: string; label: string; icon: s
 ];
 
 export function AppShell({ children }: { children: ReactNode }) {
+  const location = useLocation();
   return (
     <div className="relative flex h-screen w-full overflow-hidden bg-space text-ink-primary">
       {/* drifting nebula glow layer */}
-      <div className="pointer-events-none absolute inset-0 bg-aurora" />
+      <div className="pointer-events-none absolute inset-0 animate-aurora-pan bg-aurora" />
+      {/* planetary horizon glow */}
+      <div className="pointer-events-none absolute inset-0 bg-horizon" />
+      {/* CRT scanline overlay */}
+      <div className="pointer-events-none absolute inset-0 scanlines opacity-60" />
+      {/* shooting stars */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <span className="shooting-star animate-shooting" style={{ top: '12%', right: '14%' }} />
+        <span className="shooting-star animate-shooting" style={{ top: '36%', right: '30%', animationDelay: '2.6s' }} />
+        <span className="shooting-star animate-shooting" style={{ top: '64%', right: '8%', animationDelay: '4.2s' }} />
+      </div>
 
       <aside className="relative z-10 flex w-60 shrink-0 flex-col border-r border-border-subtle bg-surface/70 backdrop-blur-xl">
         <div className="flex items-center gap-2.5 border-b border-border-subtle px-4 py-4">
@@ -49,7 +60,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             </svg>
           </div>
           <div>
-            <div className="text-[13px] font-bold leading-none tracking-tight">SatQuery AI</div>
+            <div className="font-display text-[14px] font-bold leading-none tracking-tight">SatQuery AI</div>
             <div className="mt-1 text-[9px] font-medium uppercase tracking-[0.14em] text-ink-muted">
               Earth Observation Intelligence
             </div>
@@ -114,7 +125,11 @@ export function AppShell({ children }: { children: ReactNode }) {
         </div>
       </aside>
 
-      <main className="relative z-10 flex min-w-0 flex-1 flex-col overflow-hidden">{children}</main>
+      <main className="relative z-10 flex min-w-0 flex-1 flex-col overflow-hidden">
+        <div key={location.pathname} className="route-shell flex min-h-0 flex-1 flex-col overflow-hidden">
+          {children}
+        </div>
+      </main>
     </div>
   );
 }
@@ -124,7 +139,7 @@ export function TopBar({ title, subtitle, actions }: { title: ReactNode; subtitl
     <header className="relative flex shrink-0 items-center justify-between border-b border-border-subtle bg-surface/50 px-6 py-4 backdrop-blur-xl">
       <span className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-accent/40 to-transparent" />
       <div className="animate-fade-in">
-        <h1 className="text-lg font-bold text-ink-primary">{title}</h1>
+        <h1 className="font-display text-lg font-bold tracking-tight text-ink-primary">{title}</h1>
         {subtitle && <p className="mt-0.5 text-sm text-ink-secondary">{subtitle}</p>}
       </div>
       {actions && <div className="flex items-center gap-2.5">{actions}</div>}

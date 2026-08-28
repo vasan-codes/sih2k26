@@ -33,7 +33,7 @@ export function Dashboard() {
             <span className="h-1.5 w-1.5 animate-twinkle rounded-full bg-accent" />
             Agentic Earth Observation Intelligence
           </div>
-          <h1 className="animate-fade-up text-6xl font-extrabold tracking-tight text-gradient [animation-delay:60ms]">
+          <h1 className="animate-fade-up font-display text-7xl font-bold tracking-tight text-gradient [animation-delay:60ms]">
             SatQuery AI
           </h1>
           <p className="mt-3 animate-fade-up font-mono text-xl font-semibold text-accent [animation-delay:120ms]">

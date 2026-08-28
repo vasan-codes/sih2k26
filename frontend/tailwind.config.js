@@ -33,6 +33,7 @@ export default {
       },
       fontFamily: {
         sans: ['"Inter"', 'system-ui', '-apple-system', 'sans-serif'],
+        display: ['"Space Grotesk"', '"Inter"', 'system-ui', 'sans-serif'],
         mono: ['"JetBrains Mono"', '"IBM Plex Mono"', 'monospace'],
       },
       boxShadow: {
@@ -60,6 +61,11 @@ export default {
         'fade-up': 'fade-up 0.6s cubic-bezier(0.22,1,0.36,1) both',
         'fade-in': 'fade-in 0.5s ease-out both',
         'gradient-pan': 'gradient-pan 6s ease infinite',
+        'route-in': 'route-in 0.55s cubic-bezier(0.22,1,0.36,1) both',
+        'aurora-pan': 'aurora-pan 24s ease-in-out infinite',
+        'shooting': 'shooting 6s ease-in infinite',
+        'radar-sweep': 'radar-sweep 4s linear infinite',
+        'ticker': 'ticker 1.2s steps(1) infinite',
       },
       keyframes: {
         scan: {
@@ -97,6 +103,28 @@ export default {
         'gradient-pan': {
           '0%, 100%': { backgroundPosition: '0% 50%' },
           '50%': { backgroundPosition: '100% 50%' },
+        },
+        'route-in': {
+          '0%': { opacity: '0', transform: 'translateY(14px) scale(0.994)', filter: 'blur(6px)' },
+          '100%': { opacity: '1', transform: 'translateY(0) scale(1)', filter: 'blur(0)' },
+        },
+        'aurora-pan': {
+          '0%, 100%': { transform: 'translate3d(0,0,0) scale(1)', opacity: '0.9' },
+          '50%': { transform: 'translate3d(-3%,2%,0) scale(1.08)', opacity: '1' },
+        },
+        shooting: {
+          '0%': { transform: 'translate3d(0,0,0) rotate(18deg)', opacity: '0' },
+          '6%': { opacity: '1' },
+          '18%': { transform: 'translate3d(-420px,150px,0) rotate(18deg)', opacity: '0' },
+          '100%': { transform: 'translate3d(-420px,150px,0) rotate(18deg)', opacity: '0' },
+        },
+        'radar-sweep': {
+          '0%': { transform: 'rotate(0deg)' },
+          '100%': { transform: 'rotate(360deg)' },
+        },
+        ticker: {
+          '0%, 100%': { opacity: '1' },
+          '50%': { opacity: '0.35' },
         },
       },
     },
