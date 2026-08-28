@@ -83,7 +83,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                       clsx(
                         'group relative flex items-center gap-2.5 overflow-hidden rounded-md px-2.5 py-2 text-[13px] font-medium transition-all duration-200',
                         isActive
-                          ? 'bg-accent-soft text-accent shadow-[inset_0_0_0_1px_rgba(63,182,232,0.2)]'
+                          ? 'bg-accent-soft text-accent shadow-[inset_0_0_0_1px_rgba(255,138,52,0.22)]'
                           : 'text-ink-secondary hover:translate-x-0.5 hover:bg-white/5 hover:text-ink-primary',
                       )
                     }
@@ -126,7 +126,8 @@ export function AppShell({ children }: { children: ReactNode }) {
       </aside>
 
       <main className="relative z-10 flex min-w-0 flex-1 flex-col overflow-hidden">
-        <div key={location.pathname} className="route-shell flex min-h-0 flex-1 flex-col overflow-hidden">
+        <div className="pointer-events-none absolute inset-0 bg-grid opacity-40" />
+        <div key={location.pathname} className="route-shell relative flex min-h-0 flex-1 flex-col overflow-hidden">
           {children}
         </div>
       </main>

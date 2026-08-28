@@ -19,13 +19,13 @@ interface SimNode extends KGNode {
 }
 
 const TYPE_STYLE: Record<string, { r: number; fill: string; stroke: string }> = {
-  region: { r: 16, fill: '#0f2a38', stroke: '#3fb6e8' },
-  observation: { r: 11, fill: '#0f1f38', stroke: '#4f8fe8' },
-  result: { r: 15, fill: '#1c1030', stroke: '#a78bfa' },
-  evidence: { r: 9, fill: '#0f2c22', stroke: '#31c48d' },
-  feature: { r: 7, fill: '#141c14', stroke: '#7cbf7c' },
-  external_signal: { r: 9, fill: '#331516', stroke: '#e8a33d' },
-  association: { r: 9, fill: '#332310', stroke: '#e8a33d' },
+  region: { r: 16, fill: '#22150a', stroke: '#ff8a34' },
+  observation: { r: 11, fill: '#0d2030', stroke: '#5fb2e6' },
+  result: { r: 15, fill: '#2b2109', stroke: '#f2c14e' },
+  evidence: { r: 9, fill: '#062720', stroke: '#34d39a' },
+  feature: { r: 7, fill: '#0d2030', stroke: '#8fd0f0' },
+  external_signal: { r: 9, fill: '#2c0d16', stroke: '#ff4d6a' },
+  association: { r: 9, fill: '#22150a', stroke: '#ffa75f' },
 };
 
 function nodeStyle(n: KGNode) {

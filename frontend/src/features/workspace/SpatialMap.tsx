@@ -11,10 +11,10 @@ export interface MapFeature {
 }
 
 const COLOR_HEX: Record<MapFeature['color'], string> = {
-  bad: '#e8555a',
-  warn: '#e8a33d',
-  ok: '#31c48d',
-  accent: '#3fb6e8',
+  bad: '#ff4d6a',
+  warn: '#f2c14e',
+  ok: '#34d39a',
+  accent: '#ff8a34',
 };
 
 const BASE_STYLE: maplibregl.StyleSpecification = {

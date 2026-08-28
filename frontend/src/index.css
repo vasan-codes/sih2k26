@@ -13,74 +13,77 @@
 
   body {
     margin: 0;
-    background-color: #05070a;
-    color: #e7edf5;
+    background-color: #060707;
+    color: #f2ede3;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
   ::selection {
-    background-color: rgba(63, 182, 232, 0.35);
+    background-color: rgba(255, 138, 52, 0.32);
+    color: #fff;
   }
 
   * {
-    scrollbar-color: #263344 #0b1017;
+    scrollbar-color: #2b2f35 #0c0d0f;
     scrollbar-width: thin;
   }
 
   ::-webkit-scrollbar { width: 10px; height: 10px; }
-  ::-webkit-scrollbar-track { background: #0b1017; }
-  ::-webkit-scrollbar-thumb { background: #263344; border-radius: 8px; }
-  ::-webkit-scrollbar-thumb:hover { background: #334255; }
+  ::-webkit-scrollbar-track { background: #0c0d0f; }
+  ::-webkit-scrollbar-thumb { background: #2b2f35; border-radius: 8px; }
+  ::-webkit-scrollbar-thumb:hover { background: #3c424a; }
 }
 
 @layer utilities {
   .font-tabular {
     font-variant-numeric: tabular-nums;
   }
+
+  /* Technical instrument grid — fine ruling like a chart plotter */
   .bg-grid {
     background-image:
-      linear-gradient(to right, rgba(255,255,255,0.028) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(255,255,255,0.028) 1px, transparent 1px);
-    background-size: 28px 28px;
+      linear-gradient(to right, rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 30px 30px;
   }
 
-  /* Deep-space animated backdrop: parallax star layers + drifting nebula */
+  /* Deep-space backdrop: parallax star layers with warm + ion sparks */
   .bg-space {
-    background-color: #05070a;
+    background-color: #060707;
     background-image:
-      radial-gradient(1px 1px at 20% 30%, rgba(231,237,245,0.9), transparent),
-      radial-gradient(1px 1px at 75% 15%, rgba(231,237,245,0.7), transparent),
-      radial-gradient(1.5px 1.5px at 40% 70%, rgba(99,199,240,0.8), transparent),
-      radial-gradient(1px 1px at 88% 55%, rgba(231,237,245,0.6), transparent),
-      radial-gradient(1px 1px at 12% 85%, rgba(231,237,245,0.7), transparent),
-      radial-gradient(1.5px 1.5px at 62% 42%, rgba(79,143,232,0.7), transparent),
-      radial-gradient(1px 1px at 30% 55%, rgba(231,237,245,0.5), transparent),
-      radial-gradient(2px 2px at 55% 88%, rgba(231,237,245,0.5), transparent);
+      radial-gradient(1px 1px at 20% 30%, rgba(242,237,227,0.9), transparent),
+      radial-gradient(1px 1px at 75% 15%, rgba(242,237,227,0.65), transparent),
+      radial-gradient(1.5px 1.5px at 40% 70%, rgba(255,167,95,0.75), transparent),
+      radial-gradient(1px 1px at 88% 55%, rgba(242,237,227,0.55), transparent),
+      radial-gradient(1px 1px at 12% 85%, rgba(242,237,227,0.65), transparent),
+      radial-gradient(1.5px 1.5px at 62% 42%, rgba(95,178,230,0.6), transparent),
+      radial-gradient(1px 1px at 30% 55%, rgba(242,237,227,0.45), transparent),
+      radial-gradient(2px 2px at 55% 88%, rgba(255,138,52,0.4), transparent);
     background-repeat: repeat;
     background-size: 340px 340px, 420px 420px, 520px 520px, 300px 300px, 480px 480px, 600px 600px, 260px 260px, 700px 700px;
-    animation: star-drift 140s linear infinite;
+    animation: star-drift 150s linear infinite;
   }
 
   .glass {
-    background: linear-gradient(180deg, rgba(17,25,39,0.72), rgba(11,16,23,0.72));
+    background: linear-gradient(180deg, rgba(20,22,24,0.74), rgba(12,13,15,0.74));
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
   }
 
-  /* Horizon glow — a planetary limb light at the bottom of the viewport */
+  /* Planetary limb light — warm amber horizon at the bottom of the viewport */
   .bg-horizon {
     background:
-      radial-gradient(120% 80% at 50% 118%, rgba(63,182,232,0.18) 0%, rgba(79,143,232,0.08) 34%, transparent 60%);
+      radial-gradient(120% 80% at 50% 122%, rgba(255,138,52,0.16) 0%, rgba(255,167,95,0.06) 34%, transparent 60%);
   }
 
-  /* Fine scanline overlay for a mission-control CRT feel */
+  /* Fine scanline overlay for a mission-control readout feel */
   .scanlines {
     background-image: repeating-linear-gradient(
       0deg,
-      rgba(255,255,255,0.015) 0px,
-      rgba(255,255,255,0.015) 1px,
+      rgba(255,255,255,0.014) 0px,
+      rgba(255,255,255,0.014) 1px,
       transparent 1px,
       transparent 3px
     );
@@ -91,17 +94,17 @@
     position: absolute;
     height: 1px;
     width: 130px;
-    background: linear-gradient(90deg, rgba(231,237,245,0.9), rgba(99,199,240,0.35), transparent);
+    background: linear-gradient(90deg, rgba(242,237,227,0.9), rgba(255,167,95,0.4), transparent);
     border-radius: 9999px;
-    filter: drop-shadow(0 0 6px rgba(99,199,240,0.7));
+    filter: drop-shadow(0 0 6px rgba(255,138,52,0.7));
   }
 
   /* Route transition wrapper */
   .route-shell {
-    animation: route-in 0.55s cubic-bezier(0.22,1,0.36,1) both;
+    animation: route-in 0.5s cubic-bezier(0.22,1,0.36,1) both;
   }
 
-  /* HUD corner brackets */
+  /* HUD corner brackets — instrument framing */
   .hud-frame {
     position: relative;
   }
@@ -109,24 +112,49 @@
   .hud-frame::after {
     content: '';
     position: absolute;
-    width: 14px;
-    height: 14px;
-    border-color: rgba(63,182,232,0.5);
+    width: 12px;
+    height: 12px;
+    border-color: rgba(255,138,52,0.55);
     pointer-events: none;
   }
   .hud-frame::before {
     top: -1px; left: -1px;
     border-top: 1.5px solid; border-left: 1.5px solid;
-    border-top-left-radius: 6px;
   }
   .hud-frame::after {
     bottom: -1px; right: -1px;
     border-bottom: 1.5px solid; border-right: 1.5px solid;
-    border-bottom-right-radius: 6px;
+  }
+
+  /* Four-corner tick brackets for panels */
+  .corner-ticks::before,
+  .corner-ticks::after {
+    content: '';
+    position: absolute;
+    width: 9px;
+    height: 9px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-color: rgba(255,138,52,0.6);
+  }
+  .corner-ticks::before {
+    top: 6px; left: 6px;
+    border-top: 1px solid; border-left: 1px solid;
+  }
+  .corner-ticks::after {
+    bottom: 6px; right: 6px;
+    border-bottom: 1px solid; border-right: 1px solid;
+  }
+  .group:hover .corner-ticks::before,
+  .group:hover .corner-ticks::after,
+  .corner-ticks:hover::before,
+  .corner-ticks:hover::after {
+    opacity: 1;
   }
 
   .text-gradient {
-    background: linear-gradient(135deg, #e7edf5 0%, #63c7f0 55%, #4f8fe8 100%);
+    background: linear-gradient(135deg, #f2ede3 0%, #ffa75f 52%, #ff8a34 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -141,7 +169,7 @@
     position: absolute;
     inset: 0 0 auto 0;
     height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(99,199,240,0.5), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255,167,95,0.55), transparent);
     opacity: 0;
     transition: opacity 0.3s ease;
   }

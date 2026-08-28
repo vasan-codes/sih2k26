@@ -4,68 +4,81 @@ export default {
   theme: {
     extend: {
       colors: {
-        void: '#05070a',
+        // Deep-space instrument backdrop — near-black with a faint warm undertone
+        void: '#060707',
         surface: {
-          DEFAULT: '#0b1017',
-          raised: '#111927',
-          overlay: '#161f2e',
+          DEFAULT: '#0c0d0f',
+          raised: '#141618',
+          overlay: '#1b1e22',
         },
         border: {
-          subtle: '#1c2635',
-          DEFAULT: '#263344',
-          strong: '#334255',
+          subtle: '#1f2226',
+          DEFAULT: '#2b2f35',
+          strong: '#3c424a',
         },
         ink: {
-          primary: '#e7edf5',
-          secondary: '#9aa7b8',
-          muted: '#647188',
+          primary: '#f2ede3',
+          secondary: '#a7a196',
+          muted: '#6f6a61',
         },
+        // SIGNATURE — solar amber / orbital telemetry glow (replaces cyan)
         accent: {
-          DEFAULT: '#3fb6e8',
-          hover: '#63c7f0',
-          dim: '#1c4a5e',
-          soft: '#0f2a38',
+          DEFAULT: '#ff8a34',
+          hover: '#ffa75f',
+          dim: '#5c3312',
+          soft: '#22150a',
         },
-        ok: { DEFAULT: '#31c48d', soft: '#0f2c22' },
-        warn: { DEFAULT: '#e8a33d', soft: '#332310' },
-        bad: { DEFAULT: '#e8555a', soft: '#331516' },
-        water: { DEFAULT: '#4f8fe8', soft: '#0f1f38' },
+        // Supporting cool ion tone for data / water only
+        ion: { DEFAULT: '#5fb2e6', soft: '#0d2030' },
+        ok: { DEFAULT: '#34d39a', soft: '#062720' },
+        warn: { DEFAULT: '#f2c14e', soft: '#2b2109' },
+        bad: { DEFAULT: '#ff4d6a', soft: '#2c0d16' },
+        water: { DEFAULT: '#5fb2e6', soft: '#0d2030' },
       },
       fontFamily: {
         sans: ['"Inter"', 'system-ui', '-apple-system', 'sans-serif'],
         display: ['"Space Grotesk"', '"Inter"', 'system-ui', 'sans-serif'],
         mono: ['"JetBrains Mono"', '"IBM Plex Mono"', 'monospace'],
       },
+      borderRadius: {
+        // Crisper, instrument-panel geometry
+        sm: '3px',
+        DEFAULT: '4px',
+        md: '5px',
+        lg: '7px',
+        xl: '10px',
+      },
       boxShadow: {
-        panel: '0 1px 0 0 rgba(255,255,255,0.02) inset, 0 8px 24px -12px rgba(0,0,0,0.5)',
-        glow: '0 0 0 1px rgba(63,182,232,0.35), 0 0 24px -4px rgba(63,182,232,0.35)',
-        'glow-lg': '0 0 0 1px rgba(63,182,232,0.4), 0 0 40px -6px rgba(63,182,232,0.5)',
+        panel: '0 1px 0 0 rgba(255,255,255,0.03) inset, 0 10px 30px -16px rgba(0,0,0,0.7)',
+        glow: '0 0 0 1px rgba(255,138,52,0.4), 0 0 22px -4px rgba(255,138,52,0.4)',
+        'glow-lg': '0 0 0 1px rgba(255,138,52,0.5), 0 0 46px -6px rgba(255,138,52,0.55)',
         'panel-hover':
-          '0 1px 0 0 rgba(255,255,255,0.04) inset, 0 0 0 1px rgba(63,182,232,0.15), 0 18px 48px -18px rgba(0,0,0,0.7)',
+          '0 1px 0 0 rgba(255,255,255,0.05) inset, 0 0 0 1px rgba(255,138,52,0.18), 0 22px 60px -22px rgba(0,0,0,0.8)',
       },
       backgroundImage: {
-        'aurora':
-          'radial-gradient(120% 120% at 0% 0%, rgba(63,182,232,0.16) 0%, transparent 45%), radial-gradient(120% 120% at 100% 0%, rgba(79,143,232,0.14) 0%, transparent 50%), radial-gradient(140% 140% at 50% 120%, rgba(49,196,141,0.10) 0%, transparent 55%)',
-        'accent-gradient': 'linear-gradient(135deg, #63c7f0 0%, #3fb6e8 45%, #4f8fe8 100%)',
+        aurora:
+          'radial-gradient(120% 120% at 0% 0%, rgba(255,138,52,0.15) 0%, transparent 44%), radial-gradient(120% 120% at 100% 0%, rgba(255,167,95,0.10) 0%, transparent 48%), radial-gradient(140% 140% at 50% 120%, rgba(95,178,230,0.09) 0%, transparent 55%)',
+        'accent-gradient': 'linear-gradient(135deg, #ffb066 0%, #ff8a34 48%, #f2701a 100%)',
       },
       animation: {
         'pulse-slow': 'pulse 2.4s cubic-bezier(0.4,0,0.6,1) infinite',
-        'scan': 'scan 2.2s linear infinite',
-        'float': 'float 6s ease-in-out infinite',
+        scan: 'scan 2.2s linear infinite',
+        float: 'float 6s ease-in-out infinite',
         'float-slow': 'float 9s ease-in-out infinite',
-        'twinkle': 'twinkle 4s ease-in-out infinite',
-        'shimmer': 'shimmer 2.5s linear infinite',
+        twinkle: 'twinkle 4s ease-in-out infinite',
+        shimmer: 'shimmer 2.5s linear infinite',
         'glow-pulse': 'glow-pulse 3s ease-in-out infinite',
-        'orbit': 'orbit 18s linear infinite',
+        orbit: 'orbit 18s linear infinite',
         'orbit-reverse': 'orbit 26s linear infinite reverse',
         'fade-up': 'fade-up 0.6s cubic-bezier(0.22,1,0.36,1) both',
         'fade-in': 'fade-in 0.5s ease-out both',
         'gradient-pan': 'gradient-pan 6s ease infinite',
-        'route-in': 'route-in 0.55s cubic-bezier(0.22,1,0.36,1) both',
+        'route-in': 'route-in 0.5s cubic-bezier(0.22,1,0.36,1) both',
         'aurora-pan': 'aurora-pan 24s ease-in-out infinite',
-        'shooting': 'shooting 6s ease-in infinite',
+        shooting: 'shooting 6s ease-in infinite',
         'radar-sweep': 'radar-sweep 4s linear infinite',
-        'ticker': 'ticker 1.2s steps(1) infinite',
+        ticker: 'ticker 1.2s steps(1) infinite',
+        'sweep-x': 'sweep-x 3.2s cubic-bezier(0.4,0,0.2,1) infinite',
       },
       keyframes: {
         scan: {
@@ -105,7 +118,7 @@ export default {
           '50%': { backgroundPosition: '100% 50%' },
         },
         'route-in': {
-          '0%': { opacity: '0', transform: 'translateY(14px) scale(0.994)', filter: 'blur(6px)' },
+          '0%': { opacity: '0', transform: 'translateY(12px) scale(0.995)', filter: 'blur(5px)' },
           '100%': { opacity: '1', transform: 'translateY(0) scale(1)', filter: 'blur(0)' },
         },
         'aurora-pan': {
@@ -125,6 +138,11 @@ export default {
         ticker: {
           '0%, 100%': { opacity: '1' },
           '50%': { opacity: '0.35' },
+        },
+        'sweep-x': {
+          '0%': { transform: 'translateX(-100%)', opacity: '0' },
+          '50%': { opacity: '1' },
+          '100%': { transform: 'translateX(100%)', opacity: '0' },
         },
       },
     },
