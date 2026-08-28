@@ -5,14 +5,16 @@ Nothing here is a decorative static diagram.
 
 from __future__ import annotations
 
+from sqlalchemy.orm import Session
+
 from app.db.models import Evidence, Mission, Observation
-from app.db.session import SessionLocal
-from app.demo_data.scenarios import EXTERNAL_SIGNAL, OPTICAL_SAR, REGIONS
+from app.demo_data.scenarios import EXTERNAL_SIGNAL, OPTICAL_SAR
 from app.services.correlation import correlate_external_signal
+from app.services.region_store import resolve_region
 
 
-def build_knowledge_graph(mission: Mission, observations: list[Observation], evidence_items: list[Evidence]) -> dict:
-    region = REGIONS[mission.region_key]
+def build_knowledge_graph(db: Session, mission: Mission, observations: list[Observation], evidence_items: list[Evidence]) -> dict:
+    region = resolve_region(db, mission.region_key)
     nodes = []
     edges = []
 
@@ -96,14 +98,11 @@ def build_knowledge_graph(mission: Mission, observations: list[Observation], evi
     # Innovation 2 tie-in: for the coastal wetland region, surface the external
     # observation + possible-association nodes automatically.
     if mission.region_key == OPTICAL_SAR["region_key"]:
-        db = SessionLocal()
-        try:
-            from app.db.models import ExternalObservation
-            ext_points = db.query(ExternalObservation).filter_by(region_key=mission.region_key).all()
-            ambiguous = OPTICAL_SAR["layout"]["ambiguous_patch"]
-            corr = correlate_external_signal(ext_points, (ambiguous["cx"], ambiguous["cy"]))
-        finally:
-            db.close()
+        from app.db.models import ExternalObservation
+
+        ext_points = db.query(ExternalObservation).filter_by(region_key=mission.region_key).all()
+        ambiguous = OPTICAL_SAR["layout"]["ambiguous_patch"]
+        corr = correlate_external_signal(ext_points, (ambiguous["cx"], ambiguous["cy"]))
 
         ext_node_id = "external:wading_bird_occurrence"
         nodes.append({

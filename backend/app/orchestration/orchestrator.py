@@ -11,13 +11,14 @@ from sqlalchemy.orm import Session
 
 from app.db.models import Evidence, ExecutionStep, Mission, Observation
 from app.demo_data.generate_imagery import STATIC_DIR
-from app.demo_data.scenarios import IMG_SIZE, REGIONS
+from app.demo_data.scenarios import IMG_SIZE
 from app.orchestration.workflow_planner import classify_tasks, select_services
 from app.services import change_analysis, cross_modal_analysis
 from app.services import evidence as evidence_svc
 from app.services import confidence as confidence_svc
 from app.services.input_validation import validate_geospatial, validate_inputs
 from app.services.query_understanding import understand_query
+from app.services.region_store import resolve_region
 from app.services.vqa_grounding import answer_vqa, compute_landcover_stats, generate_caption, ground_query
 
 STAGES = [
@@ -101,7 +102,7 @@ def _summarize(output) -> str:
 
 
 def run_mission_pipeline(db: Session, mission: Mission) -> Mission:
-    region = REGIONS[mission.region_key]
+    region = resolve_region(db, mission.region_key)
     logger = _StepLogger(db, mission)
 
     # ---- Stage 1: Understanding Query -------------------------------------------------

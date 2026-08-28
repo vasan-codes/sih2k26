@@ -6,6 +6,7 @@ import type {
   MissionSummary,
   Mode,
   ModelRegistryEntry,
+  Observation,
   QueryUnderstanding,
   Region,
   ValidateInputsResponse,
@@ -58,6 +59,29 @@ export const api = {
     request<{ mission_id: string; format: string; content: string }>(`/api/report/${missionId}`, { method: 'POST' }),
 
   listModels: () => request<ModelRegistryEntry[]>('/api/models'),
+
+  uploadObservation: async (
+    file: File,
+    role: string,
+    mode: Mode,
+    sensorType: 'optical' | 'sar' | 'multispectral',
+    acquisitionDate?: string,
+    regionKey?: string,
+  ) => {
+    const form = new FormData();
+    form.append('file', file);
+    form.append('role', role);
+    form.append('mode', mode);
+    form.append('sensor_type', sensorType);
+    if (acquisitionDate) form.append('acquisition_date', acquisitionDate);
+    if (regionKey) form.append('region_key', regionKey);
+    const res = await fetch(`${API_BASE}/api/observations/upload`, { method: 'POST', body: form });
+    if (!res.ok) {
+      const body = await res.text().catch(() => '');
+      throw new Error(`${res.status} ${res.statusText}: ${body}`);
+    }
+    return res.json() as Promise<Observation>;
+  },
 
   listRegions: () => request<Region[]>('/api/regions'),
   getRegion: (key: string) => request<Region>(`/api/regions/${key}`),

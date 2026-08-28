@@ -34,10 +34,12 @@ export function SpatialMap({
   regionBbox,
   features,
   onFeatureClick,
+  active = true,
 }: {
   regionBbox: number[];
   features: MapFeature[];
   onFeatureClick?: (id: string) => void;
+  active?: boolean;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
@@ -106,6 +108,15 @@ export function SpatialMap({
     if (map.isStyleLoaded()) render();
     else map.once('load', render);
   }, [features, onFeatureClick]);
+
+  // The GIS panel keeps this component mounted and toggles visibility via CSS
+  // rather than mounting/unmounting per tab (rapid WebGL context churn was
+  // unreliable across tab switches). Since the container may have been
+  // display:none at construction time, resize() re-reads its real dimensions
+  // once it becomes visible again.
+  useEffect(() => {
+    if (active) mapRef.current?.resize();
+  }, [active]);
 
   return <div ref={containerRef} className="h-full w-full rounded-md border border-border-subtle" />;
 }
